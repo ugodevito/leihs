@@ -151,6 +151,7 @@ module Json
          when :contract
            {:barcode => true,
             :note => true,
+            :created_at => true,
             :inventory_pool => {:address => {}},
             :lines => {:item => {:price => true},
                        :model => {},
