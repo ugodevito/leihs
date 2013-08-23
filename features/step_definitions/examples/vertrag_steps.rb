@@ -182,3 +182,9 @@ Dann /^diese Liste enthält Gegenstände, die ausgeliehen und noch nicht zurück
     @contract_element.find(".not_returned_items").should have_content line.item.inventory_code
   end
 end
+
+Dann(/^sieht man auf jeder Linie die Rücknehmende Person im Format "(.*?)"$/) do |arg1|
+  @contract.lines.each do |cl|
+    cl.find(".returning-date").should have_content cl.returned_to_user.short_name
+  end
+end

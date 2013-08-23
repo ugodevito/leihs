@@ -44,7 +44,7 @@ Funktionalität: Vertrag
     | Rückgabedatum / Rücknehmende Person |
 
   @javascript   
-  Szenario: Rüchnehmende Person
+  Szenario: Rücknehmende Person
     Dann sieht man auf jeder Linie die Rücknehmende Person im Format "P. Castelli"
   
   @javascript
