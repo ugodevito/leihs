@@ -20,13 +20,13 @@ When /^I assign an item to the hand over by providing an inventory code and a da
   line_amount_before = all(".line").size
   assigned_amount_before = all(".line.assigned").size
   find("#process_helper .button").click
-  wait_until(25) { line_amount_before == all(".line").size and assigned_amount_before < all(".line.assigned").size }
+  wait_until { line_amount_before == all(".line").size and assigned_amount_before < all(".line.assigned").size }
 end
 
 When /^I select one of those$/ do
   wait_until { find(".line[data-id='#{@item_line.id}'] .inventory_code input") }.click
   page.execute_script("$(\".line[data-id='#{@item_line.id}'] .inventory_code input\").focus()")
-  wait_until(25) { find(".ui-autocomplete a") }
+  wait_until { find(".ui-autocomplete a") }
   @selected_inventory_code = find(".ui-autocomplete a").find(".label").text
   find(".ui-autocomplete a").click
   step "ensure there are no active requests"

@@ -3,7 +3,7 @@
 Angenommen /^man öffnet die Liste des Inventars$/ do
   @current_inventory_pool = @current_user.managed_inventory_pools.first
   visit backend_inventory_pool_inventory_path(@current_inventory_pool)
-  wait_until(10){ find(".line:not(.navigation)") }
+  wait_until{ find(".line:not(.navigation)") }
 end
 
 Wenn /^man die Liste des Inventars öffnet$/ do

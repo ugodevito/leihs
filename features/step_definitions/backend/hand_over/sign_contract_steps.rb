@@ -28,7 +28,7 @@ When /^I click hand over inside the dialog$/ do
   wait_until { find ".dialog .button" }
   sleep(0.5)
   find(".dialog .button", :text => /(Hand Over|Aushändigen)/).click
-  wait_until(20){ find(".dialog .documents") }
+  wait_until{ find(".dialog .documents") }
 end
 
 Then /^the contract is signed for the selected items$/ do

@@ -4,7 +4,7 @@ When /^I add an item to the hand over by providing an inventory code and a date 
   find("#code").set @inventory_code
   line_amount_before = all(".line").size
   find("#process_helper .button").click
-  wait_until(25) { line_amount_before < all(".line").size }
+  wait_until { line_amount_before < all(".line").size }
 end
 
 Then /^the item is added to the hand over for the provided date range and the inventory code is already assigend$/ do
@@ -14,12 +14,12 @@ Then /^the item is added to the hand over for the provided date range and the in
 end
 
 When /^I add an option to the hand over by providing an inventory code and a date range$/ do
-  wait_until(15){ all(".loading", :visible => true).empty? }
+  wait_until{ all(".loading", :visible => true).empty? }
   @inventory_code = @current_user.managed_inventory_pools.first.options.first.inventory_code
   find("#code").set @inventory_code
   page.execute_script('$("#code").focus()')
   find("#process_helper .button").click
-  wait_until(25){ page.evaluate_script("$.active") == 0}
+  wait_until{ page.evaluate_script("$.active") == 0}
   find(".line .inventory_code", :text => @inventory_code)
   step 'the option is added to the hand over'
 end
@@ -29,12 +29,12 @@ Then /^the (.*?) is added to the hand over$/ do |type|
   case type
   when "option"  
     option = Option.find_by_inventory_code(@inventory_code)
-    wait_until(25){ page.evaluate_script("$.active") == 0}
+    wait_until{ page.evaluate_script("$.active") == 0}
     @option_line = contract.reload.option_lines.where(:option_id => option).first
     contract.reload.options.include?(option).should == true
     find(".option_line .inventory_code", :text => @inventory_code)
   when "model"
-    wait_until(25){ page.evaluate_script("$.active") == 0}
+    wait_until{ page.evaluate_script("$.active") == 0}
     contract.reload.models.include?(@model).should == true
     find(".item_line", :text => @model.name)
   end
@@ -121,5 +121,5 @@ When /^I add an item to the hand over$/ do
   find("#code").set @item.inventory_code
   page.execute_script('$("#code").focus()')
   find("#process_helper .button").click
-  wait_until(25){ page.evaluate_script("$.active") == 0}
+  wait_until{ page.evaluate_script("$.active") == 0}
 end

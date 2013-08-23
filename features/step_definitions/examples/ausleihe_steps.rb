@@ -3,7 +3,7 @@
 Angenommen /^ich öffne die Tagesansicht$/ do
   @current_inventory_pool = @current_user.managed_inventory_pools.first
   visit backend_inventory_pool_path(@current_inventory_pool)
-  wait_until(10){ find("#daily") }
+  wait_until{ find("#daily") }
 end
 
 Wenn /^ich kehre zur Tagesansicht zurück$/ do
