@@ -17,7 +17,7 @@ module Json
         end
 
         if with[:returned_to_user]
-          h[:returned_to_user] = line.returned_to_user.short_name
+          h[:returned_to_user] = line.returned_to_user.try(:short_name)
         end
 
         if with[:is_valid]

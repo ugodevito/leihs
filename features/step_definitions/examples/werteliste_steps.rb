@@ -72,7 +72,7 @@ Dann /^diese summierte die Spalten:$/ do |table|
       when "Anzahl"
         @total.find(".quantity").should have_content @contract.quantity 
       when "Wert"
-        @total.find(".value").text.gsub(/\D/, "").should == ("%.2f" % @contract.items.map(&:price).inject{|sum,x| sum+x}).gsub(/\D/, "")
+        @total.find(".value").text.gsub(/\D/, "").should == ("%.2f" % (@contract.items + @contract.options).map(&:price).inject{|sum,x| sum+x}).gsub(/\D/, "")
     end
   end
 end

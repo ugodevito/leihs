@@ -100,7 +100,6 @@ Dann(/^sehe ich die Werteliste genau wie im Verwalten\-Bereich$/) do
     | Laufende Nummer |
     | Inventarcode    |
     | Modellname      |
-    | Start Datum     |
     | End Datum       |
     | Anzahl          |
     | Wert            |
@@ -170,7 +169,7 @@ Dann(/^sehe ich den Vertrag genau wie im Verwalten-Bereich$/) do
   unless returned_lines.empty?
     @contract_element.text.should have_content _("Returned Items")
     @contract_element.all("tbody .returning_date").each do |date|
-      date.text.should_not == ""
+      date.text.should match @current_user.short_name
     end
   end
 
