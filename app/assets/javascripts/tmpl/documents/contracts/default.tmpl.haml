@@ -47,7 +47,10 @@ ${$not_returned_lines = Line.get_not_returned(lines), ""}
           %td.inventory_code ${line.item.inventory_code}
           %td.model_name ${line.model.name}
           %td.end_date ${moment(line.end_date).format(i18n.date.L)}
-          %td.returning_date ${moment(line.returned_date).format(i18n.date.L)}
+          %td.returning_date 
+            ${moment(line.returned_date).format(i18n.date.L)}
+            != "&raquo;"
+            ${line.returned_to_user}
         {{/each}}
   {{/if}}
   
