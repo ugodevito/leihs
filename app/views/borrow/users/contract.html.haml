@@ -48,7 +48,7 @@
               %td.end_date= l line.end_date
               %td.returning_date
                 = l line.returned_date
-                != "&raquo; #{line.returned_to_user.try(:short_name)}"
+                != "#{line.returned_to_user.try(:short_name)}"
 
   - unless not_returned_lines.empty?
     %section.list.not_returned_items
