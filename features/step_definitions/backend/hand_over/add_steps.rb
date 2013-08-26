@@ -4,7 +4,8 @@ When /^I add an item to the hand over by providing an inventory code and a date 
   find("#code").set @inventory_code
   line_amount_before = all(".line").size
   find("#process_helper .button").click
-  wait_until { line_amount_before < all(".line").size }
+  sleep(0.44)
+  line_amount_before.should < all(".line").size
 end
 
 Then /^the item is added to the hand over for the provided date range and the inventory code is already assigend$/ do
@@ -14,27 +15,24 @@ Then /^the item is added to the hand over for the provided date range and the in
 end
 
 When /^I add an option to the hand over by providing an inventory code and a date range$/ do
-  wait_until{ all(".loading", :visible => true).empty? }
   @inventory_code = @current_user.managed_inventory_pools.first.options.first.inventory_code
   find("#code").set @inventory_code
   page.execute_script('$("#code").focus()')
   find("#process_helper .button").click
-  wait_until{ page.evaluate_script("$.active") == 0}
   find(".line .inventory_code", :text => @inventory_code)
   step 'the option is added to the hand over'
 end
 
 Then /^the (.*?) is added to the hand over$/ do |type|
+  sleep(0.44)
   contract = @customer.get_current_contract(@ip)
   case type
   when "option"  
     option = Option.find_by_inventory_code(@inventory_code)
-    wait_until{ page.evaluate_script("$.active") == 0}
     @option_line = contract.reload.option_lines.where(:option_id => option).first
     contract.reload.options.include?(option).should == true
     find(".option_line .inventory_code", :text => @inventory_code)
   when "model"
-    wait_until{ page.evaluate_script("$.active") == 0}
     contract.reload.models.include?(@model).should == true
     find(".item_line", :text => @model.name)
   end
@@ -44,7 +42,7 @@ When /^I add an option to the hand over which is already existing in the selecte
   2.times do
     step 'I add an option to the hand over by providing an inventory code and a date range'
   end
-  wait_until { @option_line.reload.quantity == 2 }
+  @option_line.reload.quantity.should == 2
 end
 
 Then /^the existing option quantity is increased$/ do
@@ -74,12 +72,12 @@ end
 
 Then /^I see a list of suggested (.*?) names$/ do |type|
   page.execute_script('$("#code").focus()')
-  find(".ui-autocomplete a")
+  first(".ui-autocomplete a")
 end
 
 When /^I select the (.*?) from the list$/ do |type|
   sleep(1)
-  find(".ui-autocomplete a", :text => @target_name).click
+  first(".ui-autocomplete a", :text => @target_name).click
 end
 
 Then /^each model of the template is added to the hand over for the provided date range$/ do
@@ -111,9 +109,7 @@ end
 Then /^I see that all lines of that model have availability problems$/ do
   @lines = find(".linegroup", :text => /(Today|Heute)/).all(".item_line", :text => @target_name)
   @lines.each do |line|
-    wait_until {
-      line.find(".problem.icon")
-    } 
+    line.find(".problem.icon")
   end
 end
 
@@ -121,5 +117,4 @@ When /^I add an item to the hand over$/ do
   find("#code").set @item.inventory_code
   page.execute_script('$("#code").focus()')
   find("#process_helper .button").click
-  wait_until{ page.evaluate_script("$.active") == 0}
 end

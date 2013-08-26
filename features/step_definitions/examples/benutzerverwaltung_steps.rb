@@ -58,17 +58,14 @@ end
 
 Dann /^man kann filtern nach den folgenden Eigenschaften: gesperrt$/ do
   step 'man kann filtern nach "%s" Rolle' % _("Customer")
-  wait_until { all(".loading", :visible => true).empty? }
 
   find("[ng-model='suspended']").click
-  wait_until { all(".loading", :visible => true).empty? }
   @inventory_pool.suspended_users.customers.paginate(page: 1, per_page: 20).each do |user|
     page.should have_content(user.name)
   end
   page.should have_content _("List of Users")
 
   find("[ng-model='suspended']").click
-  wait_until { all(".loading", :visible => true).empty? }
   @inventory_pool.users.customers.paginate(page: 1, per_page: 20).each do |user|
     page.should have_content(user.name)
   end
@@ -89,7 +86,6 @@ Dann /^man kann filtern nach den folgenden Rollen:$/ do |table|
             else
               User.scoped
             end.paginate(page:1, per_page: 20)
-    wait_until { all(".loading", :visible => true).empty? }
     users.each do |user|
       page.should have_content(user.name)
     end

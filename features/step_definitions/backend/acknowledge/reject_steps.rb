@@ -6,13 +6,14 @@ end
 When /^I reject an order$/ do
   @order = @ip.orders.submitted.first
   find(".toggle .text").click
+  binding.pry
   find(".order .list .line[data-id='#{@order.id}']")
   find(".order .list .line[data-id='#{@order.id}'] .actions .trigger").click
   find(".order .list .line[data-id='#{@order.id}'] .actions .button", :text => _("Reject")).click
 end
 
 Then /^I see a summary of that order$/ do
-  wait_until { find(".dialog") }
+  find(".dialog")
   unless @order.purpose.description.nil?
     find(".dialog .purpose").should have_content @order.purpose.description[0..25]
   end
@@ -27,7 +28,7 @@ When /^I reject the order$/ do
 end
 
 Then /^the order is rejected$/ do
-  wait_until { all(".order .list .line[data-id='#{@order.id}']").size == 0 }
+  page.should_not have_selector(".order .list .line[data-id='#{@order.id}']")
   @order.reload.status_const.should == Order::REJECTED 
 end
 

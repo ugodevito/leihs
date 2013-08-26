@@ -18,18 +18,18 @@ end
 
 When /^I open the booking calendar for this line$/ do
   @line_element.find(".button", :text => /(Edit|Editieren)/).click
-  wait_until { find("#fullcalendar .fc-day-content") }
+  first("#fullcalendar .fc-day-content")
 end
 
 When /^I edit the timerange of the selection$/ do
   page.execute_script('$("#selection_actions .button").show()')
   find(".button", :text => /(Edit Selection|Auswahl editieren)/).click
-  wait_until { find("#fullcalendar .fc-day-content") }
+  first("#fullcalendar .fc-day-content")
 end
 
 When /^I save the booking calendar$/ do
   find(".dialog .button", :text => /(Save Changes|Änderungen speichern)/).click
-  wait_until { all(".dialog").size == 0 }
+  page.should_not have_selector(".dialog")
 end
 
 When /^I change (.*?) lines time range$/ do |type|
@@ -46,9 +46,8 @@ When /^I change (.*?) lines time range$/ do |type|
     else
       @line.start_date + 1.day
   end
-  wait_until { find(".fc-widget-content .fc-day-number") }
-  @new_start_date_element = get_fullcalendar_day_element(@new_start_date)
-  @new_start_date_element.click
+  first(".fc-widget-content .fc-day-number")
+  get_fullcalendar_day_element(@new_start_date).click
   find("a", :text => /(Start Date|Startdatum)/).click
   step 'I save the booking calendar'
 end
@@ -89,8 +88,7 @@ When /^I change the time range for multiple lines$/ do
   step 'I select two lines'
   step 'I edit the timerange of the selection'
   @new_start_date = @line1.start_date + 2.days
-  @new_start_date_element = get_fullcalendar_day_element(@new_start_date)
-  @new_start_date_element.click
+  get_fullcalendar_day_element(@new_start_date).click
   find("a", :text => /(Start Date|Startdatum)/).click
   step 'I save the booking calendar'
 end
@@ -114,7 +112,7 @@ When /^I edit one of the selected lines$/ do
 end
 
 Then /^I see the booking calendar$/ do
-  wait_until{ find("#fullcalendar .fc-day-content") }
+  first("#fullcalendar .fc-day-content")
 end
 
 When /^I change the time range for multiple lines that have quantity bigger then (\d+)$/ do |arg1|

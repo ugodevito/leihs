@@ -191,7 +191,6 @@ end
 
 Dann(/^wird der Eintrag gemäss aktuellen Einstellungen geändert$/) do
   step "ensure there are no active requests"
-  wait_until{all(".loading").empty?}
   if @new_date
     wait_until{@changed_lines.first.reload.start_date == @new_date}
     wait_until{find("*", :text => I18n.l(@new_date))}

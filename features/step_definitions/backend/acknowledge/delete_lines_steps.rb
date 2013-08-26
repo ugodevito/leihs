@@ -13,12 +13,11 @@ When /^I delete a line of this order$/ do
   @line = @order.lines.first
   @line_element = find(".line", :text => @line.model.name)
   @line_element.find(".multibutton .trigger").click
-  wait_until {@line_element.find(".button", :text => _("Delete"))}
   @line_element.find(".button", :text => _("Delete")).click
-  wait_until { page.evaluate_script("$.active") == 0 }
 end
 
 Then /^this orderline is deleted$/ do
+  sleep(0.44)
   @order.lines.reload.include?(@line).should == false
 end
 
@@ -32,7 +31,8 @@ When /^I delete the selection$/ do
   page.execute_script('$("#selection_actions .button").show()')
   line_amount_before = all(".line").size
   find(".button", :text => /.*(Delete|Löschen).*/i).click
-  wait_until { all(".line").size < line_amount_before }
+  sleep(0.44)
+  all(".line").size.should < line_amount_before
 end
 
 Then /^these orderlines are deleted$/ do
@@ -50,7 +50,7 @@ When /^I delete all lines of this order$/ do
 end
 
 Then /^I got an error message that not all lines can be deleted$/ do
-  wait_until {find(".notification")}
+  find(".notification")
   find(".error.notification")
 end
 

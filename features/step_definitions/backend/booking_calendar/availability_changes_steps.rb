@@ -6,7 +6,7 @@ When /^I open a booking calendar to edit a singe line$/ do
   visit backend_inventory_pool_acknowledge_path(@ip, @order)
   @edited_line = find(".line", :text => @model.name)
   @edited_line.find(".actions .button").click
-  wait_until { find(".dialog") }
+  find(".dialog")
 end
 
 Then /^I see all availabilities in that calendar, where the small number is the total quantity of that specific date$/ do
@@ -32,7 +32,7 @@ Then /^I see all availabilities in that calendar, where the small number is the 
         if next_date.month != last_month
           find(".fc-button-next").click   
         end
-        change_date_el = find(".fc-widget-content:not(.fc-other-month) .fc-day-number", :text => /#{next_date.day}/).find(:xpath, "../..")
+        change_date_el = first(".fc-widget-content:not(.fc-other-month) .fc-day-number", :text => /#{next_date.day}/).find(:xpath, "../..")
         # check total, where the small number is the total quantity of that specific date
         total_quantity = change[1]
         # add quantity of edited line when date element is selected

@@ -110,7 +110,8 @@ end
 ##############################################################
 
 def get_fullcalendar_day_element(date)
-  wait_until { all("td[data-date='#{date}']").first }
+  sleep(0.44)
+  first("td[data-date='#{date}']")
 end
 
 def type_into_autocomplete(selector, value)
@@ -118,7 +119,7 @@ def type_into_autocomplete(selector, value)
   find(selector).set value
   page.execute_script("$('#{selector}').focus()")
   page.execute_script("$('#{selector}').autocomplete('search')")
-  wait_until{ find(".ui-autocomplete") }
+  find(".ui-autocomplete")
 end
 
 def change_line_start_date(line, days = 2)

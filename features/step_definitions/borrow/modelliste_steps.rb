@@ -53,7 +53,6 @@ Dann(/^sind alle anderen Geräteparks abgewählt$/) do
 end
 
 Dann(/^die Modellliste zeigt nur Modelle dieses Geräteparks an$/) do
-  wait_until {all(".loading").empty?}
   all("#model-list .text-align-left").map(&:text).reject{|t| t.empty?}.should eq @current_user.models.borrowable
                                                   .from_category_and_all_its_descendants(@category.id)
                                                   .by_inventory_pool(@ip.id)

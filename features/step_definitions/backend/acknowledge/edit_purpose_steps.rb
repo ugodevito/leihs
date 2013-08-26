@@ -8,7 +8,6 @@ When /^I change the order's purpose$/ do
   @new_purpose = "A new purpose"
   find(".dialog #purpose").set @new_purpose
   find(".dialog .button[type=submit]").click
-  wait_until{ all(".dialog .loading").size == 0 }
 end
 
 Then /^the order's purpose is changed$/ do

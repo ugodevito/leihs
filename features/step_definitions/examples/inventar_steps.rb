@@ -20,10 +20,8 @@ end
 
 Dann /^man sieht Pakete$/ do
   step 'ich nach "%s" suche' % @current_inventory_pool.items.packages.last.inventory_code
-  wait_until { all(".loading", :visible => true).empty? }
   wait_until {not all(".model.package.line").empty?}
   step 'ich nach "%s" suche' % " "
-  wait_until { all(".loading", :visible => true).empty? }
 end
 
 ########################################################################
@@ -198,7 +196,6 @@ end
 
 Wenn /^man eine Gegenstands\-Zeile sieht$/ do
   all(".tab").detect{|x| x["data-tab"] == '{"borrowable":true}'}.click
-  wait_until { all(".loading", :visible => true).empty? }
   find(".filter input[data-filter='in_stock']").click unless find(".filter input[data-filter='in_stock']").checked?
 end
 
@@ -284,7 +281,6 @@ end
 
 Wenn /^meine Abteilung Besitzer des Gegenstands ist die Verantwortung aber auf eine andere Abteilung abgetreten hat$/ do
   find(".responsible option[data-responsible_id!='#{@current_inventory_pool.id}']").select_option
-  wait_until { all(".loading", :visible => true).empty? }
   all(".toggle .text").each {|toggle| toggle.click}
   index = 0
   while not @item or not @item.in_stock?
@@ -433,7 +429,6 @@ end
 Dann /^die Daten wurden entsprechend aktualisiert$/ do
   search_string = @table_hashes.detect {|h| h["Feld"] == "Name"}["Wert"]
   step 'ich nach "%s" suche' % search_string
-  wait_until { all(".loading", :visible => true).empty? }
   find(".line", :text => search_string).find("a", :text => Regexp.new(_("Edit"),"i")).click
 
   # check that the same model was modified

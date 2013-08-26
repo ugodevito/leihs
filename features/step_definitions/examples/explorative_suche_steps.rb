@@ -122,7 +122,6 @@ Dann(/^kann ich ein Modell anhand der explorativen Suche wählen$/) do
   wait_until { page.evaluate_script("$.active") == 0}
   model = Model.find find(".dialog .line")["data-id"]
   find(".line button.select-model").click
-  wait_until{all(".loading", :visible => true).empty?}
   wait_until{not all(".notification").empty?}
   if @order
     expect(@order.models.include? model).to be_true
