@@ -20,8 +20,6 @@ Wenn /^ich(?: kann | )diesem Paket eines oder mehrere Gegenstände hinzufügen$/
 end
 
 Dann /^ist das Modell erstellt und die Pakete und dessen zugeteilten Gegenstände gespeichert$/ do
-  wait_until{ page.evaluate_script("$.active") == 0 }
-  wait_until{ Model.find_by_name(@model_name) }
   @model = Model.find_by_name @model_name
   @model.should_not be_nil
   @model.should be_is_package
@@ -44,7 +42,7 @@ Dann /^kann ich das Paket löschen und die Gegenstände sind nicht mehr dem Pake
   @package_item_ids = @package.children.map(&:id)
   find(".field-inline-entry", :text => @package.inventory_code).find(".clickable", :text => _("Delete")).click
   step 'ich speichere die Informationen'
-  wait_until {Item.find_by_id(@package.id).nil?}
+  Item.find_by_id(@package.id).nil?.should be_true
   lambda {@package.reload}.should raise_error(ActiveRecord::RecordNotFound)
   @package_item_ids.size.should > 0
   @package_item_ids.each{|id| Item.find(id).parent_id.should be_nil}
@@ -64,7 +62,7 @@ Wenn /^ich ein Modell editiere, welches bereits Pakete hat$/ do
   @model = @current_inventory_pool.models.detect {|m| not m.items.empty? and m.is_package?}
   @model_name = @model.name
   step 'ich nach "%s" suche' % @model.name
-  wait_until { find(".line", :text => @model.name).find(".button", :text => _("Edit Model")) }.click
+  find(".line", :text => @model.name).find(".button", :text => _("Edit Model")).click
 end
 
 Wenn /^ich ein Modell editiere, welches bereits Gegenstände hat$/ do
@@ -72,7 +70,7 @@ Wenn /^ich ein Modell editiere, welches bereits Gegenstände hat$/ do
   @model = @current_inventory_pool.models.detect {|m| not (m.items.empty? and m.is_package?)}
   @model_name = @model.name
   step 'ich nach "%s" suche' % @model.name
-  wait_until { find(".line", :text => @model.name).find(".button", :text => _("Edit Model")) }.click
+  find(".line", :text => @model.name).find(".button", :text => _("Edit Model")).click
 end
 
 Dann /^kann ich diesem Modell keine Pakete mehr zuweisen$/ do
@@ -110,7 +108,7 @@ Dann /^kann ich einen Gegenstand aus dem Paket entfernen$/ do
 end
 
 Dann /^dieser Gegenstand ist nicht mehr dem Paket zugeteilt$/ do
-  wait_until { page.has_content? _("List of Models") }
+  page.has_content? _("List of Models")
   @package_to_edit.reload
   @package_to_edit.children.count.should eq (@number_of_items_before - 1)
   @package_to_edit.children.detect {|i| i.inventory_code == @item_to_remove}.should be_nil
@@ -133,7 +131,6 @@ Wenn /^ich das Paket und das Modell speichere$/ do
 end
 
 Dann /^(?:besitzt das Paket alle angegebenen Informationen|das Paket besitzt alle angegebenen Informationen)$/ do
-  wait_until{ page.evaluate_script("$.active") == 0}
   model = Model.find_by_name @model_name
   visit edit_backend_inventory_pool_model_path(@current_inventory_pool, model)
   find("[ng-repeat='package in model.packages']").find(".clickable", :text => _("Edit")).click

@@ -36,7 +36,7 @@ Dann(/^sehe ich nur die Kinder dieser Hauptkategorie, die dem User zur Verfügun
   second_level_categories = @main_category.children
   visible_2nd_level_categories = (Category.with_borrowable_models_for_user(@current_user) & @main_category.children)
   @second_level_category = visible_2nd_level_categories.first
-  wait_until {find "a", text: @second_level_category.name}
+  find("a", text: @second_level_category.name)
 
   visible_2nd_level_categories_count = 0
   within find("*[data-category_id] .padding-inset-s", text: @main_category.name).find(:xpath, "../..").find(".dropdown-holder") do

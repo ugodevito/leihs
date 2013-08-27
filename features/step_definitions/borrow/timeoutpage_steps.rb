@@ -15,7 +15,7 @@ def resolve_conflict_for_model name
   step "ich setze das Startdatum im Kalendar auf '#{I18n::l(init_date)}'"
   step "ich setze das Enddatum im Kalendar auf '#{I18n::l(init_date)}'"
   find(".modal[role='dialog'] .button.green").click
-  wait_until {all("#booking-calendar").empty?}
+  all("#booking-calendar").empty?.should be_true
 end
 
 Angenommen(/^ich zur Timeout Page mit einem Konfliktmodell weitergeleitet werde$/) do

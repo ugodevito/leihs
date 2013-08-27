@@ -3,7 +3,7 @@ When /^I open the datepicker$/ do
 end
 
 When /^I select a specific date$/ do
-  wait_until { find(".ui-datepicker") }
+  find(".ui-datepicker")
   find("a.ui-datepicker-next").click
   @day = find(".ui-state-default").text
   @month = find(".ui-datepicker-month").text
@@ -23,5 +23,5 @@ end
 
 Then /^the datepicker closes$/ do
   sleep(1) # wait until the fadeOut animation is finished
-  wait_until { all(".ui-datepicker", :visible => true).size == 0 }
+  all(".ui-datepicker", :visible => true).size.should == 0
 end

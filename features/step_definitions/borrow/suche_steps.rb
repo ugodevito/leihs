@@ -10,7 +10,7 @@ Wenn(/^man einen Suchbegriff eingibt$/) do
 end
 
 Dann(/^sieht man das Foto, den Namen und den Hersteller der ersten 6 Modelle gemäss aktuellem Suchbegriff$/) do
-  wait_until{find(".ui-autocomplete")}
+  find(".ui-autocomplete")
   all(".ui-autocomplete a").length.should >= 6
   6.times do |i|
     find(:xpath, "(//*[contains(@class, 'ui-autocomplete')]//a)[#{i+1}]//strong").text[@search_term].should_not be_nil

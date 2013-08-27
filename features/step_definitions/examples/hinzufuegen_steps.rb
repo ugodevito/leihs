@@ -4,7 +4,7 @@ Angenommen /^ich suche ein Modell um es hinzuzufügen$/ do
   @truncated_model_name = @current_user.managed_inventory_pools.first.items.first.model.name[0]
   find("#code").set @truncated_model_name
   page.execute_script('$("#code").focus()')
-  wait_until { find(".ui-autocomplete .ui-menu-item") }
+  find(".ui-autocomplete .ui-menu-item")
 end
 
 Dann /^sehe ich die Verfügbarkeit innerhalb der gefundenen Modelle im Format: "(.*?)"$/ do |arg1|

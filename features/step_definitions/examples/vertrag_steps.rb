@@ -155,7 +155,7 @@ Wenn /^es Gegenstände gibt, die zurückgegeben wurden$/ do
 end
 
 Dann /^sehe ich die Liste (\d+) mit dem Titel "(.*?)"$/ do |arg1, titel|
-  wait_until{ find(".dialog .contract") }
+  find(".dialog .contract")
 
   if titel == "Zurückgegebene Gegenstände"
     find_titel = /(Returned Items|Zurückgegebene Gegenstände)/

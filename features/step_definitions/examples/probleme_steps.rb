@@ -118,28 +118,28 @@ end
 Dann /^markiere ich den Gegenstand als nicht ausleihbar$/ do
   @line.find(".actions .trigger").click
   @line.find(".actions .button", :text => /(Inspect|Inspektion)/).click
-  wait_until { find(".dialog") }
+  find(".dialog")
   find("select[name='flags[is_borrowable]']").select "Nicht ausleihbar"
   find(".dialog .navigation button[type='submit']").click
-  wait_until { find(".notification") }
+  find(".notification")
 end
 
 Dann /^markiere ich den Gegenstand als defekt$/ do
   @line.find(".actions .trigger").click
   @line.find(".actions .button", :text => /(Inspect|Inspektion)/).click
-  wait_until { find(".dialog") }
+  find(".dialog")
   find("select[name='flags[is_broken]']").select "Defekt"
   find(".dialog .navigation button[type='submit']").click
-  wait_until { find(".notification") }
+  find(".notification")
 end
 
 Dann /^markiere ich den Gegenstand als unvollständig$/ do
   @line.find(".actions .trigger").click
   @line.find(".actions .button", :text => /(Inspect|Inspektion)/).click
-  wait_until { find(".dialog") }
+  find(".dialog")
   find("select[name='flags[is_incomplete]']").select "Unvollständig"
   find(".dialog .navigation button[type='submit']").click
-  wait_until { find(".notification") }
+  find(".notification")
 end
 
 Angenommen /^eine Gegenstand ist defekt$/ do
@@ -165,9 +165,9 @@ Angenommen /^eine Gegenstand ist unvollständig$/ do
 end
 
 Dann /^sehe ich auf der Linie des betroffenen Gegenstandes die Auszeichnung von Problemen$/ do
-  wait_until { find(".line[data-id='#{@line.reload["data-id"]}']") }
+  find(".line[data-id='#{@line.reload["data-id"]}']")
   page.execute_script(%Q{ $(".line[data-id=#{@line.reload["data-id"]}] .problems").trigger("mouseenter") })
-  wait_until { find(".tip").text.match(/\w/) }
+  find(".tip").text.match(/\w/).should be_true
   @problems = []
   @problems << find(".tip").text
 end

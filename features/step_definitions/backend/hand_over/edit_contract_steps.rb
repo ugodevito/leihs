@@ -34,18 +34,16 @@ When /^I change the time range for that option$/ do
 end
 
 Then /^the time range for that option line is changed$/ do
-  wait_until { page.evaluate_script("$.active") == 0 }
   @option_line.reload.start_date.should == @new_start_date
 end
 
 When(/^I add an option$/) do
   @option = Option.find_by_inventory_pool_id @current_inventory_pool.id
   field_value = @option.name
-  input_field = find("input.autocomplete")
+  input_field = first("input.autocomplete")
   input_field.set field_value
   input_field.click
-  wait_until {not all("a", text: field_value).empty?}
-  find("a", text: field_value).click
+  first("a", text: field_value).click
 end
 
 When(/^I change the quantity right on the line$/) do

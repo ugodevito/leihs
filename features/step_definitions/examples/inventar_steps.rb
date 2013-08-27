@@ -3,7 +3,7 @@
 Angenommen /^man öffnet die Liste des Inventars$/ do
   @current_inventory_pool = @current_user.managed_inventory_pools.first
   visit backend_inventory_pool_inventory_path(@current_inventory_pool)
-  wait_until{ find(".line:not(.navigation)") }
+  find(".line:not(.navigation)")
 end
 
 Wenn /^man die Liste des Inventars öffnet$/ do
@@ -20,7 +20,7 @@ end
 
 Dann /^man sieht Pakete$/ do
   step 'ich nach "%s" suche' % @current_inventory_pool.items.packages.last.inventory_code
-  wait_until {not all(".model.package.line").empty?}
+  all(".model.package.line").empty?.should be_false
   step 'ich nach "%s" suche' % " "
 end
 
@@ -273,7 +273,7 @@ Wenn /^der Gegenstand nicht an Lager ist und meine oder andere Abteilung für de
   find(".filter input[data-filter='in_stock']").click if find(".filter input[data-filter='in_stock']").checked?
   step 'ich nach "%s" suche' % @current_inventory_pool.items.detect{|i| not i.inventory_pool_id.nil? and not i.in_stock?}.inventory_code
   step "ensure there are no active requests"
-  wait_until {not all(".items .item.line .item_location.borrower").empty?}
+  all(".items .item.line .item_location.borrower").empty?.should be_false
   all(".toggle .text").each {|toggle| toggle.click}
   @item_line = find(".items .item.line .item_location.borrower").find(:xpath, "..")
   @item = Item.find_by_inventory_code @item_line.find(".inventory_code").text
@@ -416,13 +416,20 @@ Und /^ich speichere die Informationen/ do
 end
 
 Dann /^ensure there are no active requests$/ do
-  wait_until {page.evaluate_script(%Q{jQuery.active}) == 0}
+  def wait_for_ajax
+    Timeout.timeout(Capybara.default_wait_time) do
+      loop do
+        active = page.evaluate_script('jQuery.active')
+        break if active == 0
+      end
+    end
+  end
+  wait_for_ajax
 end
 
 Dann /^die Informationen sind gespeichert$/ do
   search_string = @table_hashes.detect {|h| h["Feld"] == "Name"}["Wert"]
   step 'ich nach "%s" suche' % search_string
-  wait_until {page.evaluate_script(%Q{jQuery.active}) == 0}
   step 'I should see "%s"' % search_string
 end
 
@@ -468,7 +475,7 @@ Wenn /^ich eine?n? bestehende[s|n]? (.+) bearbeite$/ do |entity|
                   @option.name
                 end
   step 'ich nach "%s" suche' % object_name
-  wait_until { find(".line", :text => object_name).find(".button", :text => "#{entity} editieren") }.click
+  find(".line", :text => object_name).find(".button", :text => "#{entity} editieren").click
 end
 
 Wenn /^ich ein bestehendes Modell bearbeite welches bereits Zubehör hat$/ do
@@ -548,7 +555,7 @@ Dann /^kann ich ein einzelnes Zubehör für meinen Pool deaktivieren$/ do
 end
 
 Dann /^kann ich mehrere Bilder hinzufügen$/ do
-  wait_until{find("input[type='file']")}
+  find("input[type='file']")
   page.execute_script("$('input:file').attr('class', 'visible');")
   image_field_id = find ".visible"
   ["image1.jpg", "image2.jpg", "image3.png"].each do |image|
@@ -563,7 +570,7 @@ end
 
 Dann /^zu grosse Bilder werden den erlaubten Grössen entsprechend verkleinert$/ do
   step 'ich nach "%s" suche' % @model.name
-  wait_until { find(".line", :text => @model.name).find(".button", :text => "Modell editieren") }.click
+  find(".line", :text => @model.name).find(".button", :text => "Modell editieren").click
   @images_to_save.each do |image_name|
     find("a[href*='#{image_name}']").find("img[src*='#{image_name.split(".").first}_thumb.#{image_name.split(".").last}']")
   end
@@ -597,13 +604,12 @@ end
 
 Dann /^sind die Attachments gespeichert$/ do
   step "ensure there are no active requests"
-  wait_until {@model.attachments.where(:filename => @attachment_filename).empty? == false}
+  @model.attachments.where(:filename => @attachment_filename).empty?.should be_false
 end
 
 Dann /^sieht man keine Modelle, denen keine Gegenstänge zugewiesen unter keinem der vorhandenen Reiter$/ do
   all(".inlinetabs .tab").each do |tab|
     tab.click
-    wait_until {page.evaluate_script(%Q{jQuery.active}) == 0}
     all(".model.line .toggle .text", :text => "0").size.should == 0
   end
 end

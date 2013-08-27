@@ -59,7 +59,7 @@ When(/^ich kann höchstens die maximale Anzahl an verfügbaren Geräten eingeben
   r = find(".row", text: @model_link.model.name).find("input[name='lines[][quantity]']")
   max = r[:max].to_i
   r.set max+1
-  wait_until {r.value.to_i == max}
+  r.value.to_i.should == max
 end
 
 When(/^sehe ich eine auffällige Warnung sowohl auf der Seite wie bei den betroffenen Modellen$/) do
@@ -155,7 +155,7 @@ Dann(/^ich kann das Zeitfenster für die Verfügbarkeitsberechnung einzelner Mod
   step "ich setze das Startdatum im Kalendar auf '#{I18n::l(init_date)}'"
   step "ich setze das Enddatum im Kalendar auf '#{I18n::l(init_date)}'"
   find(".modal[role='dialog'] .button.green").click
-  wait_until {all("#booking-calendar").empty?}
+  all("#booking-calendar").empty?.should be_true
 end
 
 Wenn(/^ich sämtliche Verfügbarkeitsprobleme gelöst habe$/) do

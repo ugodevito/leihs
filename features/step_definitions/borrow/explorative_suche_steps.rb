@@ -24,10 +24,8 @@ Wenn(/^ich eine Kategorie wähle$/) do
 end
 
 Dann(/^werden die Modelle der aktuell angewählten Kategorie angezeigt$/) do
-  wait_until do
-    (Rack::Utils.parse_nested_query URI.parse(current_url).query)["category_id"].to_i.should == @category.id
-    find("#model-list")
-  end
+  (Rack::Utils.parse_nested_query URI.parse(current_url).query)["category_id"].to_i.should == @category.id
+  find("#model-list")
   models = Model.from_category_and_all_its_descendants(@category.id).active
   within "#model-list" do
     models.each do |model|

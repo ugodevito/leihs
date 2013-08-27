@@ -23,7 +23,7 @@ Angenommen /^ich öffne den Kalender$/ do
     ContractLine.find_by_id @line_el["data-id"]
   end
   @line_el.find(".actions .button", :text => /(Edit|Editieren)/).click
-  wait_until { find(".fc-day-content") }
+  find(".fc-day-content")
 end
 
 Dann /^kann ich die Anzahl unbegrenzt erhöhen \/ überbuchen$/ do
@@ -48,5 +48,5 @@ Angenommen /^ich editiere alle Linien$/ do
 end
 
 Dann /^wird in der Liste unter dem Kalender die entsprechende Linie als nicht verfügbar \(rot\) ausgezeichnet$/ do
-  wait_until{ find(".dialog .list .line.unavailable", :text => @model.name) }
+  find(".dialog .list .line.unavailable", :text => @model.name)
 end

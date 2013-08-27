@@ -1,16 +1,14 @@
 When /^I click an inventory code input field of an item line$/ do
   @item_line = @customer.contracts.unsigned.last.lines.first
   @item = @item_line.model.items.in_stock.last
-  @item_line_element = find(".item_line", :text => @item.model.name)
-  @item_line_element.find(".inventory_code input").click
-  page.execute_script("$('.line[data-id=#{@item_line.id}] .inventory_code input').focus()")
+  @item_line_element = first(".item_line", :text => @item.model.name)
+  @item_line_element.first(".inventory_code input").click
 end
 
 Then /^I see a list of inventory codes of items that are in stock and matching the model$/ do
-  find(".ui-autocomplete")
-  puts @item.model.items.in_stock
-  @item.model.items.in_stock do |item|
-    find(".ui-autocomplete").should have_content item.inventory_code
+  @item_line_element.find(".ui-autocomplete")
+  @item.model.items.in_stock.each do |item|
+    @item_line_element.find(".ui-autocomplete").should have_content item.inventory_code
   end
 end
 
@@ -20,15 +18,15 @@ When /^I assign an item to the hand over by providing an inventory code and a da
   line_amount_before = all(".line").size
   assigned_amount_before = all(".line.assigned").size
   find("#process_helper .button").click
-  wait_until { line_amount_before == all(".line").size and assigned_amount_before < all(".line.assigned").size }
+  line_amount_before.should == all(".line").size
+  assigned_amount_before.should < all(".line.assigned").size
 end
 
 When /^I select one of those$/ do
-  wait_until { find(".line[data-id='#{@item_line.id}'] .inventory_code input") }.click
-  page.execute_script("$(\".line[data-id='#{@item_line.id}'] .inventory_code input\").focus()")
-  wait_until { find(".ui-autocomplete a") }
-  @selected_inventory_code = find(".ui-autocomplete a").find(".label").text
-  find(".ui-autocomplete a").click
+  find(".line[data-id='#{@item_line.id}'] .inventory_code input").click
+  find(".line[data-id='#{@item_line.id}'] .ui-autocomplete")
+  @selected_inventory_code = find(".line[data-id='#{@item_line.id}'] .ui-autocomplete a .label").text
+  find(".line[data-id='#{@item_line.id}'] .ui-autocomplete a").click
   step "ensure there are no active requests"
 end
 
@@ -44,7 +42,6 @@ When /^I add an item which is matching the model of one of the selected lines to
   @item = @hand_over.lines.first.model.items.in_stock.first
   find("#code").set @item.inventory_code
   page.execute_script('$("#process_helper").submit()')
-  wait_until { all(".loading", :visible => true).empty? }
 end
 
 Then /^the first itemline in the selection matching the provided inventory code is assigned$/ do

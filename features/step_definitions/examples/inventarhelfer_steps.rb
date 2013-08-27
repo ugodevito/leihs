@@ -16,12 +16,12 @@ end
 
 Dann /^wähle Ich all die Felder über eine List oder per Namen aus$/ do
   find("#fieldname").click
-  wait_until {!all(".ui-menu-item a", :visible => true).empty?}
+  all(".ui-menu-item a", :visible => true).empty?.should be_false
   number_of_items_left = all(".ui-menu-item a", :visible => true).size
 
   number_of_items_left.times do 
     find("#fieldname").click
-    wait_until {!all(".ui-menu-item a", :visible => true).empty?}
+    all(".ui-menu-item a", :visible => true).empty?.should be_false
     find(".ui-menu-item a").click
   end  
 end
@@ -49,20 +49,20 @@ Dann /^ich setze all ihre Initalisierungswerte$/ do
         @data[field[:id]] = find(".field[data-field_id='#{field[:id]}'] input[type='text']").value
       when "date"
         find(".field[data-field_id='#{field[:id]}'] .datepicker").click
-        wait_until{ not all(:xpath, "//*[contains(@class, 'ui-state-default')]").empty? }
+        all(:xpath, "//*[contains(@class, 'ui-state-default')]").empty?.should be_false
         find(:xpath, "//*[contains(@class, 'ui-state-default')]").click
         @data[field[:id]] = find(".field[data-field_id='#{field[:id]}'] input.datepicker").value
       when "autocomplete"
         target_name = find(".field[data-field_id='#{field[:id]}'] .autocomplete")['data-autocomplete_value_target']
         page.execute_script %Q{ $(".autocomplete[data-autocomplete_value_target='#{target_name}']").focus() }
         page.execute_script %Q{ $(".autocomplete[data-autocomplete_value_target='#{target_name}']").focus() }
-        wait_until{ not all(".ui-menu-item a",:visible => true).empty? }
+        all(".ui-menu-item a",:visible => true).empty?.should be_false
         find(".ui-menu-item a").click
         @data[field[:id]] = find(".field[data-field_id='#{field[:id]}'] .autocomplete")
       when "autocomplete-search"
         find(".field[data-field_id='#{field[:id]}'] input").set "Sharp Beamer"
         find(".field[data-field_id='#{field[:id]}'] input").click
-        wait_until {not all("a", text: "Sharp Beamer").empty?}
+        all("a", text: "Sharp Beamer").empty?.should be_false
         find(".field[data-field_id='#{field[:id]}'] a", text: "Sharp Beamer").click
         @data[field[:id]] = Model.find_by_name("Sharp Beamer").id
       when "checkbox"
@@ -98,7 +98,7 @@ end
 
 Dann /^sehe ich alle Werte des Gegenstandes in der Übersicht mit Modellname, die geänderten Werte sind bereits gespeichert$/ do
   FastGettext.locale = @current_user.language.locale_name.gsub(/-/, "_")
-  wait_until {!all("#item.selected").empty?}
+  all("#item.selected").empty?.should be_false
   Field.all.each do |field|
     next if all(".field[data-field_id='#{field[:id]}']").empty?
     value = field.get_value_from_params @item.reload
@@ -184,7 +184,7 @@ Dann /^gebe ich den Anfang des Inventarcodes eines Gegenstand ein$/ do
 end
 
 Dann /^wähle den Gegenstand über die mir vorgeschlagenen Suchtreffer$/ do
-  wait_until{!all(".ui-menu-item").empty?}
+  all(".ui-menu-item").empty?.should be_false
   find(".ui-menu-item a", :text => @item.inventory_code).click
 end
 
@@ -230,7 +230,7 @@ end
 Dann(/^wähle ich das Feld "(.*?)" aus der Liste aus$/) do |field|
   find("#fieldname").click
   find("#fieldname").set field
-  wait_until {all(".ui-menu-item a")[0].text == field}
+  all(".ui-menu-item a")[0].text.should == field
   find("#fieldname").native.send_keys([:down, :return])
   @all_editable_fields = all("#field_selection .field", :visible => true)
 end

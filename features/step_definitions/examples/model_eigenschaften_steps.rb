@@ -27,9 +27,8 @@ Wenn /^ich die Eigenschaften sortiere$/ do
 end
 
 Dann /^sind die Eigenschaften gemäss Sortierreihenfolge für dieses Modell gespeichert$/ do
-  wait_until { page.evaluate_script("$.active") == 0 }
-  wait_until { all(".line").size > 0 }
-  wait_until{ not Model.last.properties.empty? }
+  all(".line").size.should > 0
+  Model.last.properties.empty?.should be_false
   Model.last.properties.each_with_index do |property, i|
     property.key.should == @properties[i][:key]
     property.value.should == @properties[i][:value]
@@ -37,8 +36,7 @@ Dann /^sind die Eigenschaften gemäss Sortierreihenfolge für dieses Modell gesp
 end
 
 Dann /^sind die Eigenschaften gemäss Sortierreihenfolge für das geänderte Modell gespeichert$/ do
-  wait_until { page.evaluate_script("$.active") == 0 }
-  wait_until { all(".line").size > 0 }
+  all(".line").size.should > 0
   @model = @model.reload
   @model.properties.size.should == @properties.size
   @model.properties.each_with_index do |property, i|

@@ -26,18 +26,18 @@ Und /^man gibt die Elternelemente und die dazugehörigen Bezeichnungen ein$/ do
 end
 
 Dann /^ist die Kategorie mit dem angegegebenen Namen erstellt$/ do
-  wait_until {current_path == (backend_inventory_pool_categories_path @current_inventory_pool)}
+  current_path.should == (backend_inventory_pool_categories_path @current_inventory_pool)
   ModelGroup.where(name: "#{@new_category_name}").count.should eql 1
 end
 
 Dann /^ist die Kategorie mit dem angegegebenen Namen und den zugewiesenen Elternelementen erstellt$/ do
-  wait_until {current_path == (backend_inventory_pool_categories_path @current_inventory_pool)}
+  current_path.should == (backend_inventory_pool_categories_path @current_inventory_pool)
   ModelGroup.where(name: "#{@new_category_name}").count.should eql 1
   ModelGroupLink.where("ancestor_id = ? AND label = ?", @parent_category.id, @label_1).count.should eql 1
 end
 
 Dann /^sieht man die Liste der Kategorien$/ do
-  wait_until {current_path == (backend_inventory_pool_categories_path @current_inventory_pool)}
+  current_path.should == (backend_inventory_pool_categories_path @current_inventory_pool)
   @parent_categories = ModelGroup.where(type: "Category").select { |mg| ModelGroupLink.where(descendant_id: mg.id).empty? }
   @parent_categories.each do |pc|
     find ".line.category", visible: true, text: pc.name
@@ -47,7 +47,7 @@ end
 Wenn /^man eine Kategorie editiert$/ do
   visit backend_inventory_pool_categories_path @current_inventory_pool
   @category= ModelGroup.where(name: "Portabel").first
-  wait_until {find ".line.category"}
+  find ".line.category"
   all(".toggle .text").each {|toggle| toggle.click}
   find("a[href*='#{@category.id.to_s + '/edit'}']").click
 end
@@ -56,7 +56,7 @@ Wenn /^man den Namen und die Elternelemente anpasst$/ do
   @new_category_name = "Neue Kategorie"
   find(".field.text input").set @new_category_name
 
-  wait_until {find "input[type='checkbox']"}
+  find "input[type='checkbox']"
   all("input[type='checkbox'][checked='checked']").map(&:value).uniq.each {|id| find("input[value='#{id}']").click}
 
   @new_parent_category_1 = ModelGroup.where(name: "Standard").first
@@ -84,7 +84,7 @@ Wenn /^man speichert die editierte Kategorie/ do
 end
 
 Dann /^werden die Werte gespeichert$/ do
-  wait_until {current_path == (backend_inventory_pool_categories_path @current_inventory_pool)}
+  current_path.should == (backend_inventory_pool_categories_path @current_inventory_pool)
   @category.reload
   @category.name.should eql @new_category_name
   @category.links_as_child.count.should eql 3
@@ -116,7 +116,7 @@ end
 Wenn /^man das Modell editiert$/ do
   @model = Model.where(name: "Sharp Beamer").first
   step 'ich nach "%s" suche' % @model.name
-  wait_until { find(".line", :text => "#{@model.name}").find(".button", :text => _("Edit %s" % "Model")) }.click
+  find(".line", :text => "#{@model.name}").find(".button", :text => _("Edit %s" % "Model")).click
 end
 
 Wenn /^ich die Kategorien zuteile$/ do
@@ -160,14 +160,13 @@ end
 
 Wenn /^man die Kategorie löscht$/ do
   visit backend_inventory_pool_categories_path @current_inventory_pool
-  wait_until { find(".line.category[data-id='#{@unused_category.id}']") }
+  find(".line.category[data-id='#{@unused_category.id}']")
   all(".toggle .text").each do |toggle| toggle.click end
   find(".line.category[data-id='#{@unused_category.id}'] .actions .trigger").click
   find(".line.category[data-id='#{@unused_category.id}'] .actions .button", :text => _("Delete %s") % _("Category")).click
 end
 
 Dann /^ist die Kategorie gelöscht und alle Duplikate sind aus dem Baum entfernt$/ do
-  wait_until {page.evaluate_script("jQuery.active") == 0}
   sleep(1)
   all(".line.category[data-id='#{@unused_category.id}']").empty?.should be_true
   lambda{@unused_category.reload}.should raise_error
@@ -183,7 +182,7 @@ end
 
 Dann /^ist es nicht möglich die Kategorie zu löschen$/ do
   visit backend_inventory_pool_categories_path @current_inventory_pool
-  wait_until { find(".line.category[data-id='#{@used_category.id}']") }
+  find(".line.category[data-id='#{@used_category.id}']")
   all(".line.category[data-id='#{@used_category.id}'] .actions .button", :text => _("Delete Category")).size.should == 0
 end
 
@@ -197,7 +196,7 @@ Wenn /^man nach einer Kategorie anhand des Namens sucht$/ do
   @searchTerm ||= Category.first.name[0]
   countBefore = all(".line").size
   find("input[name='query']").set @searchTerm
-  wait_until {countBefore != all(".line").size}
+  countBefore.should != all(".line").size
   sleep(1)
 end
 

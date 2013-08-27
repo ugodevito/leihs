@@ -60,7 +60,7 @@ Wenn(/^ich über ein solches Bild hovere$/) do
 end
 
 Dann(/^wird das Bild zum Hauptbild$/) do
-  wait_until { not find("#main-image")["src"][model_image_path(@model, offset: 0)].blank? }
+  find("#main-image")["src"][model_image_path(@model, offset: 0)].blank?.should be_false
 end
 
 Wenn(/^ich über ein weiteres Bild hovere$/) do
@@ -68,7 +68,7 @@ Wenn(/^ich über ein weiteres Bild hovere$/) do
 end
 
 Dann(/^wird dieses zum Hauptbild$/) do
-  wait_until { not find("#main-image")["src"][model_image_path(@model, offset: 1)].blank? }
+  find("#main-image")["src"][model_image_path(@model, offset: 1)].blank?.should be_false
 end
 
 Wenn(/^ich ein Bild anklicke$/) do
@@ -77,7 +77,7 @@ end
 
 Dann(/^wird das Bild zum Hauptbild auch wenn ich das hovern beende$/) do
   find("body").click
-  wait_until { not find("#main-image")["src"][model_image_path(@model, offset: 1)].blank? }
+  find("#main-image")["src"][model_image_path(@model, offset: 1)].blank?.should be_false
 end
 
 Angenommen(/^man befindet sich in einer Modellübersicht mit Eigenschaften$/) do

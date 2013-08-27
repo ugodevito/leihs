@@ -5,7 +5,7 @@ Angenommen(/^es existiert noch kein Gerätepark$/) do
 end
 
 Wenn(/^ich im Admin\-Bereich unter dem Reiter Geräteparks einen neuen Gerätepark erstelle$/) do
-  wait_until {current_path == backend_inventory_pools_path}
+  current_path.should == backend_inventory_pools_path
   click_link _("Create %s") % _("Inventory Pool")
 end
 
@@ -24,11 +24,11 @@ Dann(/^ist der Gerätepark gespeichert$/) do
 end
 
 Dann(/^eine Bestätigung wird angezeigt$/) do
-  wait_until {page.has_selector? ".success"}
+  page.has_selector? ".success"
 end
 
 Dann(/^ich sehe die Geräteparkliste$/) do
-  wait_until {page.has_content? _("List of Inventory Pools")}
+  page.has_content? _("List of Inventory Pools")
 end
 
 Wenn(/^ich (.+) nicht eingebe$/) do |must_field|
@@ -47,7 +47,7 @@ end
 
 Wenn(/^ich im Admin\-Bereich unter dem Reiter Geräteparks einen bestehenden Gerätepark ändere$/) do
   @ip = InventoryPool.first
-  wait_until {page.has_content? _("List of Inventory Pools")}
+  page.has_content? _("List of Inventory Pools")
   find("ul.line", text: @ip.name).click_link _("Edit %s") % _("Inventory Pool")
 end
 
@@ -65,7 +65,7 @@ Wenn(/^ich im Admin\-Bereich unter dem Reiter Geräteparks einen bestehenden Ger
   @ip = InventoryPool.find &:can_destroy?
   visit backend_inventory_pools_path
 
-  wait_until { find("ul.line", text: @ip.name) }
+  find("ul.line", text: @ip.name)
   page.execute_script("$('.trigger .arrow').trigger('mouseover');")
   find("ul.line", text: @ip.name).find(".button", text: _("Delete %s") % _("Inventory Pool")).click
 end

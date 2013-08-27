@@ -30,9 +30,9 @@ Dann /^kann ich für jedes sichtbare Model die Timeline anzeigen lassen$/ do
     end
     line.find(".button", :text => _("Timeline")).click
     find(".dialog iframe")
-    wait_until { evaluate_script %Q{ $(".dialog iframe").contents().find("#my_timeline").length; } }
+    evaluate_script %Q{ $(".dialog iframe").contents().find("#my_timeline").length; }
     find(".dialog .button.close_dialog").click
-    wait_until{ all(".dialog", visible: true).size == 0 }
+    all(".dialog", visible: true).size.should == 0
   end
 end
 

@@ -12,7 +12,7 @@ end
 Dann(/^kann ich die Gerätepark\-Grundinformationen eingeben$/) do |table|
   # table is a Cucumber::Ast::Table
   @table_raw = table.raw
-  wait_until {not all(".inner .field").empty?}
+  all(".inner .field").empty?.should be_false
   @table_raw.flatten.each do |field_name|
     if field_name == "Verträge drucken"
       find(".inner .field", text: field_name).find("input").set false
@@ -28,7 +28,7 @@ Dann(/^ich kann die angegebenen Grundinformationen speichern$/) do
 end
 
 Dann(/^sind die Informationen aktualisiert$/) do
-  wait_until {not all(".inner .field").empty?}
+  all(".inner .field").empty?.should be_false
   @table_raw.flatten.each do |field_name|
     if field_name == "Verträge drucken"
       find(".inner .field", text: field_name).find("input").selected?.should be_false
@@ -52,7 +52,7 @@ end
 
 Dann(/^kann das Gerätepark nicht gespeichert werden$/) do
   click_button _("Save %s") % _("Inventory Pool")
-  wait_until {page.should have_selector ".error"}
+  page.should have_selector ".error"
 end
 
 Angenommen(/^ich die folgenden Felder nicht befüllt habe$/) do |table|

@@ -7,7 +7,7 @@ Wenn /^versuche eine Aktion im Backend auszuführen obwohl ich abgemeldet bin$/ 
 end
 
 Dann /^werden ich auf die Startseite weitergeleitet$/ do
-  wait_until {current_path == root_path}
+  current_path.should == root_path
 end
 
 Dann /^sehe einen Hinweis, dass ich nicht angemeldet bin$/ do

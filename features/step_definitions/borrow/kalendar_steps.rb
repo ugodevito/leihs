@@ -7,7 +7,7 @@ Wenn(/^man auf einem Model "Zur Bestellung hinzufügen" wählt$/) do
 end
 
 Dann(/^öffnet sich der Kalender$/) do
-  wait_until{ find("#booking-calendar .fc-day-content") }
+  first("#booking-calendar .fc-day-content")
 end
 
 Wenn(/^ich den Kalender schliesse$/) do
@@ -35,8 +35,8 @@ Wenn(/^man versucht ein Modell zur Bestellung hinzufügen, welches nicht verfüg
 end
 
 Wenn(/^ich setze die Anzahl im Kalendar auf (\d+)$/) do |quantity|
-  wait_until{find("#booking-calendar-quantity")}
-  wait_until{find(".modal.ui-shown")}
+  find("#booking-calendar-quantity")
+  find(".modal.ui-shown")
   sleep 1
   find("#booking-calendar-quantity").set quantity
 end
@@ -60,9 +60,9 @@ end
 
 Wenn(/^man einen Gegenstand aus der Modellliste hinzufügt$/) do
   visit borrow_models_path(category_id: Category.find {|c| !c.models.active.blank?})
-  @model_name = find(".line .line-col.col3of6").text
+  @model_name = first(".line .line-col.col3of6").text
   @model = Model.find_by_name(@model_name)
-  find(".line .button").click
+  first(".line .button").click
 end
 
 Dann(/^der Kalender beinhaltet die folgenden Komponenten$/) do |table|
@@ -280,5 +280,5 @@ Dann(/^man kann maximal die maximal ausleihbare Anzahl eingeben$/) do
   inventory_pool = InventoryPool.find(all("#booking-calendar-inventory-pool option").detect{|o| o.selected?}["data-id"])
   max_quantity = @model.total_borrowable_items_for_user(@current_user, inventory_pool)
   find("#booking-calendar-quantity").set (max_quantity+1).to_s
-  wait_until{find("#booking-calendar-quantity").value == (max_quantity).to_s}
+  find("#booking-calendar-quantity").value.should == (max_quantity).to_s
 end

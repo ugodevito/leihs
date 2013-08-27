@@ -40,7 +40,6 @@ Wenn(/^die Benutzer hinzufüge$/) do
   @users = @current_inventory_pool.users.customers
   @users.each do |user|
    fill_in "add-user", :with => user.name
-   wait_until{find(".ui-menu-item a", :text => user.name)}
    find(".ui-menu-item a", :text => user.name).click
   end
 end
@@ -50,7 +49,6 @@ Wenn(/^die Modelle und deren Kapazität hinzufüge$/) do
   @partitions = []
   @models.each do |model|
     fill_in "add-model", :with => model.name
-    wait_until{find(".ui-menu-item a", :text => model.name)}
     find(".ui-menu-item a", :text => model.name).click
     borrowable_items = model.items.where(:inventory_pool_id => @current_inventory_pool.id).borrowable.size - 1
     partition = {:model_id => model.id, :quantity => (borrowable_items.zero? ? 0 : rand(borrowable_items)) + 1}
@@ -98,7 +96,6 @@ Wenn(/^die Benutzer hinzufüge und entferne$/) do
   user = (@current_inventory_pool.users-@group.users).shuffle.first
   @users = [user]
   fill_in "add-user", :with => user.name
-  wait_until{find(".ui-menu-item a", :text => user.name)}
   find(".ui-menu-item a", :text => user.name).click
 end
 
@@ -108,7 +105,6 @@ Wenn(/^die Modelle und deren Kapazität hinzufüge und entferne$/) do
   end
   model = (@current_inventory_pool.models-@group.models).first
   fill_in "add-model", :with => model.name
-  wait_until{find(".ui-menu-item a", :text => model.name)}
   find(".ui-menu-item a", :text => model.name).click
   partition = {:model_id => model.id, :quantity => rand(model.items.where(:inventory_pool_id => @current_inventory_pool.id).borrowable.size-1)+1}
   @partitions = [partition]
@@ -129,7 +125,7 @@ end
 Wenn(/^ich eine Gruppe lösche$/) do
   @group = @current_inventory_pool.groups.detect &:can_destroy?
   visit backend_inventory_pool_groups_path @current_inventory_pool
-  wait_until { find("ul.line", text: @group.name) }
+  find("ul.line", text: @group.name)
   page.execute_script("$('.trigger .arrow').trigger('mouseover');")
   find("ul.line", text: @group.name).find(".button", text: _("Delete %s") % _("Group")).click
 end
@@ -176,7 +172,7 @@ Wenn(/^ich ein bereits hinzugefügtes Modell hinzufüge$/) do
 end
 
 Dann(/^wird das Modell nicht erneut hinzugefügt$/) do
-  wait_until {find ".field", text: _("Models")}
+  find ".field", text: _("Models")
   find(".inner", text: _("Models")).all(".field-inline-entry", text: @model.name).count.should == 1
 end
 

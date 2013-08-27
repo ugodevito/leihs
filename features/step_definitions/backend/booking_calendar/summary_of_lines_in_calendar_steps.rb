@@ -4,7 +4,5 @@ When /^I change the quantity$/ do
 end
 
 Then /^the specific line in the summary inside the calendar also updates its quantity$/ do
-  wait_until do
-    find(".dialog .line", :text => @edited_line.find(".name").text).find(".requested .number").text.to_i == @new_quantity
-  end
+  find(".dialog .line", :text => @edited_line.find(".name").text).find(".requested .number").text.to_i.should == @new_quantity
 end

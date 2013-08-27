@@ -3,7 +3,7 @@
 def fill_in_autocomplete_field field_name, field_value
   find(".field", text: field_name).find("input").set field_value
   find(".field", text: field_name).find("input").click
-  wait_until {not all("a", text: field_value).empty?}
+  all("a", text: field_value).empty?.should be_false
   find(".field", text: field_name).find("a", text: field_value).click
 end
 
@@ -62,7 +62,7 @@ Wenn /^ich die folgenden Informationen erfasse$/ do |table|
     when "autocomplete"
       all("form").last.find(".field", text: field_name).find("input").set field_value
       all("form").last.find(".field", text: field_name).find("input").click
-      wait_until {not all("a", text: field_value).empty?}
+      all("a", text: field_value).empty?.should be_false
       all("form").last.find(".field", text: field_name).find("a", text: field_value).click
     else
       all("form").last.find(".field", text: field_name).find("input,textarea").set field_value
@@ -78,11 +78,11 @@ end
 Dann /^ist der Gegenstand mit all den angegebenen Informationen erstellt$/ do
   find("a[data-tab*='retired']").click if (@table_hashes.detect {|r| r["Feldname"] == "Ausmusterung"} ["Wert"]) == "Ja"
   find_field('query').set (@table_hashes.detect {|r| r["Feldname"] == "Inventarcode"} ["Wert"])
-  wait_until { all("li.modelname").first.text =~ /#{@table_hashes.detect {|r| r["Feldname"] == "Modell"} ["Wert"]}/ }
+  all("li.modelname").first.text.should =~ /#{@table_hashes.detect {|r| r["Feldname"] == "Modell"} ["Wert"]}/
   find(".toggle .icon").click
   find(".button", text: 'Gegenstand editieren').click
 
-  wait_until { all("form").count == 2 }
+  all("form").count.should == 2
   step 'hat der Gegenstand alle zuvor eingetragenen Werte'
 end
 
@@ -106,7 +106,7 @@ Dann /^hat der Gegenstand alle zuvor eingetragenen Werte$/ do
 end
 
 Dann /^man wird zur Liste des Inventars zurueckgefuehrt$/ do
-  wait_until {current_path.should eql backend_inventory_pool_inventory_path(@current_inventory_pool)}
+  current_path.should eql backend_inventory_pool_inventory_path(@current_inventory_pool)
 end
 
 Wenn /^jedes Pflichtfeld ist gesetzt$/ do |table|

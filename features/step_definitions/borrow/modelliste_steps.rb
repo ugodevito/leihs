@@ -39,9 +39,8 @@ end
 
 Wenn(/^man ein bestimmten Gerätepark in der Geräteparkauswahl auswählt$/) do
   page.execute_script %Q($("#ip-selector").trigger("mouseenter"))
-  wait_until{find("#ip-selector .dropdown .dropdown-item", :visible => true)}
+  find("#ip-selector .dropdown .dropdown-item", :visible => true)
   @ip = @current_user.inventory_pools.first
-  wait_until{find("#ip-selector .dropdown .dropdown-item", text: @ip.name)}
   find("#ip-selector .dropdown .dropdown-item", text: @ip.name).click
 end
 
@@ -73,7 +72,6 @@ Wenn(/^man einige Geräteparks abwählt$/) do
   @ip = @current_user.inventory_pools.first
   @dropdown_element = find("#ip-selector .dropdown")
   @dropdown_element.find(".dropdown-item", text: @ip.name).find("input").click
-  wait_until { page.evaluate_script("$.active") == 0}
 end
 
 Dann(/^wird die Modellliste nach den übrig gebliebenen Geräteparks gefiltert$/) do
@@ -96,7 +94,6 @@ Wenn(/^man alle Geräteparks bis auf einen abwählt$/) do
   @ips_for_unselect.each do |ip|
     find("#ip-selector .dropdown-item", text: ip.name).find("input").click
   end
-  wait_until { page.evaluate_script("$.active") == 0}
 end
 
 Dann(/^wird die Modellliste nach dem übrig gebliebenen Gerätepark gefiltert$/) do
@@ -116,10 +113,10 @@ Dann(/^kann man nicht alle Geräteparks in der Geräteparkauswahl abwählen$/) d
   page.execute_script %Q($("#ip-selector").trigger("mouseenter"))
   inventory_pool_ids = all("#ip-selector .dropdown-item[data-id]").map{|item| item["data-id"]}
   inventory_pool_ids.each do |ip_id|
-    wait_until { find("#ip-selector .dropdown .dropdown-item", :visible => true) }
+    find("#ip-selector .dropdown .dropdown-item", :visible => true)
     find("#ip-selector .dropdown-item[data-id='#{ip_id}']").click
   end
-  wait_until{find("#ip-selector .dropdown-item input", checked: true)}
+  find("#ip-selector .dropdown-item input", checked: true)
   page.execute_script %Q($("#ip-selector").trigger("mouseleave"))
 end
 
@@ -146,7 +143,7 @@ Wenn(/^man die Liste nach "(.*?)" sortiert$/) do |sort_order|
   end
   find("#model-sorting a", :text => text).click
   step "ensure there are no active requests"
-  wait_until {all("#model-list .line").count > 0}
+  all("#model-list .line").count.should > 0
 end
 
 Dann(/^ist die Liste nach "(.*?)" "(.*?)" sortiert$/) do |sort, order|
@@ -176,7 +173,7 @@ Wenn(/^man ein Suchwort eingibt$/) do
 end
 
 Dann(/^werden diejenigen Modelle angezeigt, deren Name oder Hersteller dem Suchwort entsprechen$/) do
-  wait_until {all("#model-list .line").count == 1}
+  all("#model-list .line").count.should == 1
   find("#model-list .line").text.should match /bea.*panas/i
 end
 
@@ -197,7 +194,7 @@ Dann(/^wird automatisch das Enddatum auf den folgenden Tag gesetzt$/) do
 end
 
 Dann(/^die Liste wird gefiltert nach Modellen die in diesem Zeitraum verfügbar sind$/) do
-  wait_until {all("#model-list .line").count > 0}
+  all("#model-list .line").count.should > 0
   all("#model-list .line[data-id]").each do |model_el|
     model = Model.find_by_id(model_el["data-id"])
     model = Model.find_by_id(model_el.reload["data-id"]) if model.nil?
@@ -303,13 +300,13 @@ Wenn(/^bis ans ende der bereits geladenen Modelle fährt$/) do
 end
 
 Dann(/^wird der nächste Block an Modellen geladen und angezeigt$/) do
-  wait_until{all("#model-list .line").count > 20}
+  all("#model-list .line").count.should > 20
 end
 
 Wenn(/^man bis zum Ende der Liste fährt$/) do
-  wait_until {not all(".page").empty?}
+  all(".page").empty?.should be_false
   page.execute_script %Q{ $('.page').trigger('inview'); }
-  wait_until {all(".page").empty?}
+  all(".page").empty?.should be_true
 end
 
 Dann(/^wurden alle Modelle der ausgewählten Kategorie geladen und angezeigt$/) do
@@ -361,7 +358,7 @@ Dann(/^die Liste zeigt Modelle aller Geräteparks$/) do
   models = @current_user.models.borrowable.from_category_and_all_its_descendants(@category.id)
     .all_from_inventory_pools(all("#ip-selector .dropdown-item[data-id]").map{|ip| ip["data-id"]})
     .order_by_attribute_and_direction "model", "name"
-  wait_until {all("#model-list .text-align-left").map(&:text).reject{|t| t.empty?} == models.map(&:name)}
+  all("#model-list .text-align-left").map(&:text).reject{|t| t.empty?}.should == models.map(&:name)
 end
 
 Angenommen(/^Filter sind ausgewählt$/) do
@@ -369,13 +366,13 @@ Angenommen(/^Filter sind ausgewählt$/) do
   find("input#start-date").set Date.today.strftime("%d.%m.%Y")
   find("input#end-date").set (Date.today + 1).strftime("%d.%m.%Y")
   find("body").click
-  wait_until{all(".ui-datepicker-calendar", :visible => true).empty?}
+  all(".ui-datepicker-calendar", :visible => true).empty?.should be_true
   page.execute_script %Q($("#ip-selector").trigger("mouseenter"))
-  wait_until{ !all("#ip-selector .dropdown-item", :visible => true).empty? }
+  all("#ip-selector .dropdown-item", :visible => true).empty?.should be_false
   all("#ip-selector .dropdown-item").last.click
   page.execute_script %Q($("#ip-selector").trigger("mouseleave"))
   page.execute_script %Q($("#model-sorting").trigger("mouseenter"))
-  wait_until{ !all("#model-sorting a", :visible => true).empty? }
+  all("#model-sorting a", :visible => true).empty?.should be_false
   all("#model-sorting a").last.click
   page.execute_script %Q($("#model-sorting").trigger("mouseleave"))
 end
@@ -387,7 +384,7 @@ end
 Wenn(/^man "Alles zurücksetzen" wählt$/) do
   find("#reset-all-filter").click
   step "ensure there are no active requests"
-  wait_until {all("#model-list .line").count > 0}
+  all("#model-list .line").count.should > 0
 end
 
 Dann(/^sind alle Geräteparks in der Geräteparkauswahl wieder ausgewählt$/) do
@@ -425,13 +422,13 @@ Wenn(/^ich alle Filter manuell zurücksetze$/) do
   find("input#start-date").set ""
   find("input#end-date").set ""
   find("body").click
-  wait_until{all(".ui-datepicker-calendar", :visible => true).empty?}
+  all(".ui-datepicker-calendar", :visible => true).empty?.should be_true
   page.execute_script %Q($("#ip-selector").trigger("mouseenter"))
-  wait_until{ !all("#ip-selector .dropdown-item", :visible => true).empty? }
+  all("#ip-selector .dropdown-item", :visible => true).empty?.should be_false
   all("#ip-selector .dropdown-item").first.click
   page.execute_script %Q($("#ip-selector").trigger("mouseleave"))
   page.execute_script %Q($("#model-sorting").trigger("mouseenter"))
-  wait_until{ !all("#model-sorting a", :visible => true).empty? }
+  all("#model-sorting a", :visible => true).empty?.should be_false
   all("#model-sorting a").first.click
   page.execute_script %Q($("#model-sorting").trigger("mouseleave"))
 end

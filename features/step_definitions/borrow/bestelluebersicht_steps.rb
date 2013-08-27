@@ -66,7 +66,6 @@ Wenn(/^ich einen Eintrag lösche$/) do
   lines = all(".line")
   line = lines.sample
   line.find(".dropdown-holder").click
-  wait_until{line.find("a[data-method='delete']")}
   @before_max_available = before_max_available(@current_user.get_current_order)
   line.find("a[data-method='delete']").click
   step "werde ich gefragt ob ich die Bestellung wirklich löschen möchte"
@@ -172,7 +171,7 @@ Wenn(/^ich den Eintrag ändere$/) do
 end
 
 Dann(/^öffnet der Kalender$/) do
-  wait_until{find("#booking-calendar .fc-widget-content")}
+  find("#booking-calendar .fc-widget-content")
 end
 
 Dann(/^ich ändere die aktuellen Einstellung$/) do
@@ -192,8 +191,8 @@ end
 Dann(/^wird der Eintrag gemäss aktuellen Einstellungen geändert$/) do
   step "ensure there are no active requests"
   if @new_date
-    wait_until{@changed_lines.first.reload.start_date == @new_date}
-    wait_until{find("*", :text => I18n.l(@new_date))}
+    @changed_lines.first.reload.start_date.should == @new_date
+    find("*", :text => I18n.l(@new_date))
   end
   if @new_quantity
     @changed_lines.first.order.lines.where(model_id: @changed_lines.first.model_id,
