@@ -4,6 +4,9 @@ Wenn /^versuche eine Aktion im Backend auszuführen obwohl ich abgemeldet bin$/ 
   step 'ich mache eine Aushändigung'
   page.execute_script %Q{ $.ajax({url: "/logout"}); }
   find("#code").set "A B"
+  step "ensure there are no active requests"
+  sleep(0.44)
+  sleep(0.44)
 end
 
 Dann /^werden ich auf die Startseite weitergeleitet$/ do
@@ -11,5 +14,5 @@ Dann /^werden ich auf die Startseite weitergeleitet$/ do
 end
 
 Dann /^sehe einen Hinweis, dass ich nicht angemeldet bin$/ do
-  page.should have_content("You are not logged in")
+  page.should have_content _("You are not logged in.")
 end

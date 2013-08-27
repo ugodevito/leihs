@@ -24,9 +24,8 @@ end
 
 When /^I select one of those$/ do
   find(".line[data-id='#{@item_line.id}'] .inventory_code input").click
-  find(".line[data-id='#{@item_line.id}'] .ui-autocomplete")
-  @selected_inventory_code = find(".line[data-id='#{@item_line.id}'] .ui-autocomplete a .label").text
-  find(".line[data-id='#{@item_line.id}'] .ui-autocomplete a").click
+  @selected_inventory_code = find(".line[data-id='#{@item_line.id}'] .ui-autocomplete").first("a .label").text
+  find(".line[data-id='#{@item_line.id}'] .ui-autocomplete").first("a").click
   step "ensure there are no active requests"
 end
 

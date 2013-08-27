@@ -65,7 +65,7 @@ end
 
 Dann /^werde ich beim Aushändigen darauf hingewiesen einen Zweck anzugeben$/ do
   find("#hand_over_button").click
-  find(".dialog .button")
+  first(".dialog .button")
   find(".purpose #purpose")
 end
 
@@ -91,13 +91,13 @@ end
 
 Dann /^muss ich keinen Zweck angeben um die Aushändigung durchzuführen$/ do
   find("#hand_over_button").click
-  find(".dialog .button")
+  first(".dialog .button")
   step 'kann ich die Aushändigung durchführen'
 end
 
 Wenn /^ich einen Zweck angebe$/ do
   find("#hand_over_button").click
-  find(".dialog .button")
+  first(".dialog .button")
   find(".purpose .button").click
   @added_purpose = "Another Purpose"
   find("#purpose").set @added_purpose
