@@ -14,7 +14,7 @@ Funktionalität: Vorlagen verwalten
   Szenario: Vorlage erstellen
     Angenommen ich bin Mike
     Und ich befinde mich auf der Liste der Vorlagen
-    Wenn ich auf den Button "Neue Vorlage erstellen" klicke
+    Wenn ich auf den Button "Neue Vorlage" klicke
     Dann öffnet sich die Seite zur Erstellung einer neuen Vorlage
     Wenn ich den Namen der Vorlage eingebe
     Und ich Modelle hinzufüge

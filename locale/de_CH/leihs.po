@@ -2429,3 +2429,7 @@ msgstr "Liste der Vorlagen"
 
 msgid "Template"
 msgstr "Vorlage"
+
+msgid "New Template"
+msgstr "Neue Vorlage"
+

@@ -1935,6 +1935,9 @@ msgstr ""
 msgid "New User"
 msgstr ""
 
+msgid "New Template"
+msgstr ""
+
 msgid "List of %d Users"
 msgstr ""
 

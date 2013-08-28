@@ -21,7 +21,6 @@ class Backend::TemplatesController < Backend::BackendController
 
   def new
     @my_template = Template.new
-    render :action => 'show'
   end
 
   def create
