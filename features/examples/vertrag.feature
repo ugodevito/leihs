@@ -49,7 +49,7 @@ Funktionalität: Vertrag
   @javascript   
   Szenario: Rücknehmende Person
     Angenommen man öffnet einen Vertrag bei der Rücknahme
-    Dann sieht man auf jeder Linie die Rücknehmende Person im Format "V. Nachname"
+    Dann sieht man bei den betroffenen Linien die rücknehmende Person im Format "V. Nachname"
   
   @javascript
   Szenario: Zwecke
