@@ -2357,3 +2357,9 @@ msgstr ""
 
 msgid "Borrow items"
 msgstr ""
+
+msgid "List of templates"
+msgstr ""
+
+msgid "Template"
+msgstr ""

@@ -2423,3 +2423,9 @@ msgstr "Ihre Bestellung ist leer."
 
 msgid "Borrow items"
 msgstr "Gegenstände ausleihen"
+
+msgid "List of templates"
+msgstr "Liste der Vorlagen"
+
+msgid "Template"
+msgstr "Vorlage"

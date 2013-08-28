@@ -222,6 +222,11 @@ module Persona
       FactoryGirl.create(:model_link, :model_group => @camera_tripod_template, :model => @camera_model, :quantity => 1)      
       FactoryGirl.create(:model_link, :model_group => @camera_tripod_template, :model => @tripod_model, :quantity => 1)
 
+      @beamer_hifi_template = FactoryGirl.create(:template, :name => "Beamer & Hifi")
+      @beamer_hifi_template.inventory_pools << @inventory_pool
+      FactoryGirl.create(:model_link, :model_group => @camera_tripod_template, :model => @beamer_model, :quantity => 1)      
+      FactoryGirl.create(:model_link, :model_group => @camera_tripod_template, :model => @hifi_model, :quantity => 1)
+
       @unaccomplishable_template = FactoryGirl.create(:template, :name => "Unaccomplishable template")
       @unaccomplishable_template.inventory_pools << @inventory_pool
       FactoryGirl.create(:model_link, :model_group => @unaccomplishable_template, :model => @camera_model, :quantity => 999)

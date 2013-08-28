@@ -4,14 +4,15 @@ Funktionalität: Vorlagen verwalten
 
   Als Ausleihe-Verwalter / Inventar-Verwalter möchte ich 
   die Möglichkeit haben, Vorlagen zu verwalten
-  
+
   Szenario: Liste aller Vorlagen anzeigen
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Wenn ich im Inventarbereich auf den Link "Vorlagen" klicke
     Dann öffnet sich die Seite mit der Liste der im aktuellen Inventarpool erfassten Vorlagen
-    
+    Und die Vorlagen für dieses Inventarpool sind alphabetisch nach Namen sortiert
+
   Szenario: Vorlage erstellen
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich auf der Liste der Vorlagen
     Wenn ich auf den Button "Neue Vorlage erstellen" klicke
     Dann öffnet sich die Seite zur Erstellung einer neuen Vorlage
@@ -26,7 +27,7 @@ Funktionalität: Vorlagen verwalten
     Und ich sehe die Erfolgsbestätigung
 
   Szenario: Prüfen, ob max. Anzahl bei den Modellen überschritten ist
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich der Seite zur Erstellung einer neuen Vorlage
     Und ich habe den Namen der Vorlage eingegeben
     Wenn ich Modelle hinzufüge
@@ -40,13 +41,13 @@ Funktionalität: Vorlagen verwalten
     Dann wurde die neue Vorlage mit all den erfassten Informationen erfolgreich gespeichert
 
   Szenario: Vorlage löschen
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich auf der Liste der Vorlagen
     Dann kann ich beliebige Vorlage direkt aus der Liste löschen
     Und es wird mir dabei vorher eine Warnung angezeigt
   
   Szenario: Vorlage ändern
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich auf der Liste der Vorlagen
     Wenn ich auf den Button "Vorlage bearbeiten" klicke
     Dann öffnet sich die Seite zur Bearbeitung einer existierenden Vorlage
@@ -61,7 +62,7 @@ Funktionalität: Vorlagen verwalten
     Und ich sehe die Erfolgsbestätigung
 
   Szenario: Pflichtangaben bei der Editieransicht
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich auf der Editieransicht einer Vorlage
     Wenn der Name nicht ausgefüllt ist
     Und ich speichere die bearbeitete Vorlage
@@ -72,7 +73,7 @@ Funktionalität: Vorlagen verwalten
     Dann sehe ich eine Fehlermeldung
 
   Szenario: Pflichtangaben bei der Erstellungsansicht
-    Angenommen ich bin "Mike"
+    Angenommen ich bin Mike
     Und ich befinde mich auf der Erstellungsansicht einer Vorlage
     Wenn der Name nicht ausgefüllt ist
     Und ich speichere die bearbeitete Vorlage

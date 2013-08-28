@@ -1,1 +1,63 @@
-= "TEMPLATES INDEX"
+- content_for :title, _("List of templates")
+
+.innercontent
+
+  .top
+    %h1
+      = _("List of templates")
+
+    .content_navigation
+      %a.button.white{:href => new_backend_inventory_pool_template_path(@current_inventory_pool)}
+        .icon.user
+        = _("New Template")
+
+  %section
+
+    .inlinetabs
+      .tab.active
+        %span.text
+          = _("All")
+
+    .table
+      .list.min-height
+
+        - @templates.each do |template|
+
+          %ul{:class => "line toggler model"}
+
+            .main
+              %li.modelname= template.name
+
+            .actions
+              %li.actions
+                .multibutton
+                  .alternatives
+                    .trigger
+                      .arrow
+
+                    -#= link_to "", :class => "button red open_dialog" do
+                      -#= _("Delete %s") % _("Template")
+
+                    %a{:href => backend_inventory_pool_template_path(@current_inventory_pool, template), :class => "button red", :"data-remote" => "true", :"data-on_success" => 'Line.remove({"element": $(this).closest(".line"), "color": "red"})', :"data-method" => "delete"}
+                      .delete.icon
+                      = _("Delete %s") % _("Template")
+
+                  = link_to edit_backend_inventory_pool_template_path(@current_inventory_pool, template), :class => "button white" do
+                    .icon.edit
+                    = _("Edit %s") % _("Template")
+
+:coffeescript
+
+  notice = #{flash[:notice].to_json}
+  error = #{flash[:error].to_json}
+
+  jQuery ->
+    if notice
+      Notification.add_headline
+        text: notice
+        type: "success"
+
+    if error
+      Notification.add_headline
+        text: error
+        type: "error"
